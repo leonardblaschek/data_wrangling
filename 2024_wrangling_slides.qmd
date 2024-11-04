@@ -1,0 +1,163 @@
+---
+title: "Wrangling data in R"
+author: "Leonard Blaschek"
+format:
+  revealjs: 
+    width: 1420
+    height: 800
+    slide-number: true
+    preview-links: auto
+    logo: images/KU.png
+    theme: theme/sun.scss
+    css: theme/styles.css
+    fig-width: 5
+    fig-height: 4
+    embed-resources: true
+    resources:
+      - fonts/MrsEavesOT-Roman.woff2
+      - fonts/MrsEavesOT-Italic.woff2
+      - fonts/MrsEavesOT-Bold.woff2
+      - fonts/FuturaStd-MediumOblique.woff2
+      - fonts/FuturaStd-Medium.woff2
+      - fonts/FuturaStd-BoldOblique.woff2
+      - fonts/FuturaStd-Bold.woff2
+      - fonts/IosevkaTerm-BoldItalic.woff2
+      - fonts/IosevkaTerm-Bold.woff2
+      - fonts/IosevkaTerm-Italic.woff2
+      - fonts/IosevkaTerm-Regular.woff2
+    drop:
+      shortcut: "]"
+      engine: webr
+      webr:
+        packages:
+          - tidyverse
+revealjs-plugins:
+  - drop
+---
+
+# {auto-animate=true}
+
+::: {style="font-size: 200%;"}
+*"80% of data analysis is cleaning"*
+:::
+
+— Ancient proverb
+
+# A quick word about myself
+
+# Types of data
+
+::: {.incremental}
+1. Excel sheets
+2. Delimited text files
+3. Folders of raw data
+
+::: {style="color:grey"}
+4. *Insane, lawless text files*
+5. *Proprietary formats*
+:::
+:::
+
+# Excel sheets
+
+## Tidy Data[^1]
+
+* No white space
+* One observation per row
+* One Variable per column
+* No information in formatting
+
+<br><br>
+
+[^1]: Not to be confused with pretty tables
+
+## Spot the untidyness!
+
+![](images/bad_example.png)
+
+# R fundamentals
+
+```{.r}
+ggplot()            # function
+ggplot              # object
+996107              # number
+"ggplot"            # string
+?ggplot()           # show help page 
+library(tidyverse)  # use library() to load the tidyverse package
+```
+
+## Function help pages {auto-animate=true}
+
+```{.r}
+?read_tsv()
+```
+
+:::{.fragment}
+![](images/read_tsv_help.png)
+:::
+
+## Package vignettes {auto-animate=true}
+
+```{.r}
+?readr # navigate to package index and then vignettes
+```
+
+:::{.fragment}
+![](images/readr_vignette.png)
+:::
+
+## The Pipe
+
+## Delimited text files
+
+## CSV
+
+## CSV2
+
+## TSV
+
+# Folders of files
+
+## `list.files()`
+
+## Create a read-in function
+
+# Data cleaning
+
+## Missing values
+
+## Long and wide data
+
+## Separating compound variables
+
+## Correcting data classes
+
+# Data analysis
+
+## Grouping
+
+## Mutate
+
+## Summarise
+
+## `purrr`
+
+
+
+# When you're stuck
+
+:::{.incremental}
+1. Know which package/function you need? — Help pages and vignettes!
+2. Know what you want to do but not where to start? — Try an LLM, *e.g.* [perplexity.ai](https://perplexity.ai)
+3. *I feel like I've done this before ...* — Keep your old scripts [organised]{.highlight} and [annotated]{.highlight}, chances are you'll need that little hack you came up with again in a month or two.
+:::
+
+# Exercises!
+
+Open up `2023_ggplot2_exercises.rmd` and give it a try
+
+# Resources to go further
+
+-   R for Data Science, Hadley Wickham (2023) -- <https://r4ds.hadley.nz>
+-   Fundamentals of Data Visualization, Claus O. Wilke (2019) -- <https://clauswilke.com/dataviz/>
+-   *I just need to know how to flip axis labels, quickly!* -- <https://perplexity.ai>

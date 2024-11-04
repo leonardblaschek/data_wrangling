@@ -1,0 +1,104 @@
+/*-- scss:defaults --*/
+
+// Futura Std
+@font-face {
+  font-family: "Futura Std";
+  src: url("../../../../../fonts/FuturaStd-Medium.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Futura Std";
+  src: url("../../../../../fonts/FuturaStd-Bold.woff2") format("woff2");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Futura Std";
+  src: url("../../../../../fonts/FuturaStd-MediumOblique.woff2") format("woff2");
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Futura Std";
+  src: url("../../../../../fonts/FuturaStd-BoldOblique.woff2") format("woff2");
+  font-weight: bold;
+  font-style: italic;
+}
+
+// Mrs Eaves OT
+@font-face {
+  font-family: "Mrs Eaves OT";
+  src: url("../../../../../fonts/MrsEavesOT-Roman.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Mrs Eaves OT";
+  src: url("../../../../../fonts/MrsEavesOT-Bold.woff2") format("woff2");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Mrs Eaves OT";
+  src: url("../../../../../fonts/MrsEavesOT-Italic.woff2") format("woff2");
+  font-weight: normal;
+  font-style: italic;
+}
+
+//Iosevka Term
+@font-face {
+  font-family: "Iosevka Term";
+  font-display: swap;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  src: url("../../../../../fonts/IosevkaTerm-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Iosevka Term";
+  font-display: swap;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: italic;
+  src: url("../../../../../fonts/IosevkaTerm-Italic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Iosevka Term";
+  font-display: swap;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  src: url("../../../../../fonts/IosevkaTerm-Bold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Iosevka Term";
+  font-display: swap;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: italic;
+  src: url("../../../../../fonts/IosevkaTerm-Bold.woff2") format("woff2");
+}
+
+// fonts
+$font-family-sans-serif: "Futura Std", sans-serif !default;
+$font-family-monospace: "Iosevka Term", sans-serif !default;
+$font-family-serif: "Mrs Eaves OT", serif !default;
+$presentation-heading-font: "Mrs Eaves OT", serif !default;
+
+// colors
+$body-bg: #fff !default;
+$body-color: #000 !default;
+$link-color: #00008b !default;
+$selection-bg: #e8c245 !default;
+$selection-color: #000 !default;
+
+

@@ -35,10 +35,10 @@ revealjs-plugins:
   - drop
 ---
 
-# {auto-animate=true}
+#  {auto-animate="true"}
 
 ::: {style="font-size: 200%;"}
-*"80% of data analysis is cleaning"*
+*"80% of data science is cleaning"*
 :::
 
 — Ancient proverb
@@ -47,29 +47,29 @@ revealjs-plugins:
 
 # Types of data
 
-::: {.incremental}
-1. Excel sheets
-2. Delimited text files
-3. Folders of raw data
+:::: incremental
+1.  Excel sheets
+2.  Delimited text files
+3.  Folders of raw data
 
 ::: {style="color:grey"}
-4. *Insane, lawless text files*
-5. *Proprietary formats*
+4.  *Insane, lawless text files*
+5.  *Proprietary formats*
 :::
-:::
+::::
 
 # Excel sheets
 
 ## Tidy Data[^1]
 
-* No white space
-* One observation per row
-* One Variable per column
-* No information in formatting
+[^1]: Not to be confused with pretty tables
+
+-   No white space
+-   One observation per row
+-   One Variable per column
+-   No information in formatting
 
 <br><br>
-
-[^1]: Not to be confused with pretty tables
 
 ## Spot the untidyness!
 
@@ -77,7 +77,7 @@ revealjs-plugins:
 
 # R fundamentals
 
-```{.r}
+``` r
 ggplot()            # function
 ggplot              # object
 996107              # number
@@ -86,27 +86,52 @@ ggplot              # object
 library(tidyverse)  # use library() to load the tidyverse package
 ```
 
-## Function help pages {auto-animate=true}
+## Package vignettes {auto-animate="true"}
 
-```{.r}
-?read_tsv()
-```
-
-:::{.fragment}
-![](images/read_tsv_help.png)
-:::
-
-## Package vignettes {auto-animate=true}
-
-```{.r}
+``` r
 ?readr # navigate to package index and then vignettes
 ```
 
-:::{.fragment}
+::: fragment
 ![](images/readr_vignette.png)
 :::
 
+## Function help pages {auto-animate="true"}
+
+``` r
+?read_tsv()
+```
+
+::: fragment
+![](images/read_tsv_help.png)
+:::
+
+::: fragment
+Arguments without default [need to be supplied.]{.highlight}
+:::
+
 ## The Pipe
+
+<br><br><br><br>
+
+::::: columns
+::: {.column width="50%"}
+```{r, echo=TRUE}
+library(readr)
+nrow(read_csv("data/cleaned_example.csv"))
+```
+:::
+
+::: {.column .fragment width="50%"}
+```{r, echo=TRUE}
+"data/cleaned_example.csv" |> 
+  read_csv() |> 
+  nrow()
+```
+
+The *pipe* is typed as either `%>%` or [`|>`]{.highlight}
+:::
+:::::
 
 ## Delimited text files
 
@@ -142,14 +167,12 @@ library(tidyverse)  # use library() to load the tidyverse package
 
 ## `purrr`
 
-
-
 # When you're stuck
 
-:::{.incremental}
-1. Know which package/function you need? — Help pages and vignettes!
-2. Know what you want to do but not where to start? — Try an LLM, *e.g.* [perplexity.ai](https://perplexity.ai)
-3. *I feel like I've done this before ...* — Keep your old scripts [organised]{.highlight} and [annotated]{.highlight}, chances are you'll need that little hack you came up with again in a month or two.
+::: incremental
+1.  Know which package/function you need? — Help pages and vignettes!
+2.  Know what you want to do but not where to start? — Try an LLM, *e.g.* [perplexity.ai](https://perplexity.ai)
+3.  *I feel like I've done this before ...* — Keep your old scripts [organised]{.highlight} and [annotated]{.highlight}, chances are you'll need that little hack you came up with again in a month or two.
 :::
 
 # Exercises!

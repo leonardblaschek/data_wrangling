@@ -58,15 +58,13 @@ revealjs-plugins:
 :::
 ::::
 
-# Excel sheets
-
 ## Tidy Data[^1]
 
 [^1]: Not to be confused with pretty tables
 
 -   No white space
 -   One observation per row
--   One Variable per column
+-   One variable per column
 -   No information in formatting
 
 <br><br>
@@ -110,7 +108,7 @@ library(tidyverse)  # use library() to load the tidyverse package
 Arguments without default [need to be supplied.]{.highlight}
 :::
 
-## The Pipe
+## The Pipe: Using function output as input
 
 <br><br><br><br>
 
@@ -122,30 +120,63 @@ nrow(read_csv("data/cleaned_example.csv"))
 ```
 :::
 
-::: {.column .fragment width="50%"}
+::: {.column .fragment width="50%" fragment-index=2}
 ```{r, echo=TRUE}
 "data/cleaned_example.csv" |> 
   read_csv() |> 
   nrow()
 ```
 
-The *pipe* is typed as either `%>%` or [`|>`]{.highlight}
+The *pipe* is typed as either `%>%` or [`|>`]{.highlight}[^2]
+
+[^2]: [Rstudio: `ctrl+shift+m`]{.fragment fragment-index=2}
 :::
 :::::
 
+
 ## Delimited text files
 
-## CSV
+```{.r}
+readr::read_csv()          #Comma delimited, decimal points
+readr::read_csv2()         #Semicolon delimited, decimal comma
 
-## CSV2
+readr::read_tsv()          #Tab delimited
 
-## TSV
+readr::read_delim()        #Pick your own delimiter
 
-# Folders of files
+readxl::read_xlsx()        #Excel files
+```
 
-## `list.files()`
 
-## Create a read-in function
+## Folders of files {auto-animate="true"}
+
+```{.r}
+data_files <- list.files(
+  path = "/path/to/folder",     #Folder containing data files
+  pattern = ".csv",             #Pattern that matches files of interest
+  recursive = TRUE,             #Look in sub-folders
+  full.names = TRUE             #Return full file path
+)
+```
+
+## Folders of files {auto-animate="true"}
+
+```{.r}
+data_files <- list.files(
+  path = "/path/to/folder",     #Folder containing data files
+  pattern = ".csv",             #Pattern that matches files of interest
+  recursive = TRUE,             #Look in sub-folders
+  full.names = TRUE             #Return full file path
+)
+
+library(purrr)
+data <- map(
+  data_files,
+  \(x) read_tsv(x, id = "path") #Add colum containing the file path
+  ) |> 
+  list_rbind()
+
+```
 
 # Data cleaning
 

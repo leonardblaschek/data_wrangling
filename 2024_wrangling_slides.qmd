@@ -73,9 +73,13 @@ revealjs-plugins:
 
 ![](images/bad_example.png)
 
+## Minimally tidied-up
+
+![](images/cleaned_example.png)
+
 # R fundamentals
 
-``` r
+```{.r}
 ggplot()            # function
 ggplot              # object
 996107              # number
@@ -86,7 +90,7 @@ library(tidyverse)  # use library() to load the tidyverse package
 
 ## Package vignettes {auto-animate="true"}
 
-``` r
+```{.r}
 ?readr # navigate to package index and then vignettes
 ```
 
@@ -96,7 +100,7 @@ library(tidyverse)  # use library() to load the tidyverse package
 
 ## Function help pages {auto-animate="true"}
 
-``` r
+```{.r}
 ?read_tsv()
 ```
 
@@ -178,15 +182,40 @@ data <- map(
 
 ```
 
+# Exercise 1
+
+<https://github.com/leonardblaschek/data_wrangling/2024_wrangling_exercises.rmd>
+
 # Data cleaning
 
-## Missing values
+```{r, echo = TRUE}
+data <- read_csv("data/cleaned_example.csv")
+
+data
+```
+
+
+## Systematically missing values
+
+```{r}
+data_filled <- data |> 
+  fill(Sample, .direction = "down")
+
+data_filled
+```
+
 
 ## Long and wide data
 
 ## Separating compound variables
 
 ## Correcting data classes
+
+## Filtering data
+
+# Exercise 2
+
+<https://github.com/leonardblaschek/data_wrangling/2024_wrangling_exercises.rmd>
 
 # Data analysis
 
@@ -196,7 +225,11 @@ data <- map(
 
 ## Summarise
 
-## `purrr`
+## Like a loop, but better: `map()`
+
+# Exercise 3
+
+<https://github.com/leonardblaschek/data_wrangling/2024_wrangling_exercises.rmd>
 
 # When you're stuck
 

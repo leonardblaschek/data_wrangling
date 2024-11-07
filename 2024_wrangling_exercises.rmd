@@ -3,14 +3,38 @@ title: "ggplot2 exercises"
 output: html_document
 ---
 
-## 1. Read-in a folder of three .tsv files
+## 1. Read-in a data file
+
+Read-in cleaned_example.tsv and cleaned_example.xlsx.
+Compare the results.
+
+Recommended functions:
+
+* read_tsv()
+* read_xlsx()
+
+
+```{r}
+# Load the required packages
+library(tidyverse)
+library(readxl)
+
+# Insert code below
+
+
+```
+
+## 2. Clean up 
+
+Read-in the .csv files in the lac_data folder, creating a single data frame.
+Create new columns that hold the information contained in the file names: [date]_[genotype]_[replicate]_unstained_aligned.csv
 
 Recommended functions:
 
 * list.files()
-* read_tsv()
-* map()
-* list_rbind()
+* read_csv()
+* basename()
+* separate_wider_delim()
 
 
 ```{r}
@@ -22,4 +46,29 @@ library(tidyverse)
 
 ```
 
+## 3. Analyse
 
+Read-in cleaned_example.tsv and WT.tsv, bind them together into one data frame.
+Calculate the mean, median, standard deviation and standard error across the biological replicates.
+
+Recommended functions:
+
+* read_tsv()
+* bind_rows()
+* group_by()
+* summarise()
+* mean()
+* median()
+* sd()
+* n()
+* sqrt()
+
+
+```{r}
+# Load the required packages
+library(tidyverse)
+
+# Insert code below
+
+
+```

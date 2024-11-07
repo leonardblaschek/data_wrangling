@@ -79,7 +79,7 @@ revealjs-plugins:
 
 # R fundamentals
 
-```{.r}
+``` r
 ggplot()            # function
 ggplot              # object
 996107              # number
@@ -90,7 +90,7 @@ library(tidyverse)  # use library() to load the tidyverse package
 
 ## Package vignettes {auto-animate="true"}
 
-```{.r}
+``` r
 ?readr # navigate to package index and then vignettes
 ```
 
@@ -100,7 +100,7 @@ library(tidyverse)  # use library() to load the tidyverse package
 
 ## Function help pages {auto-animate="true"}
 
-```{.r}
+``` r
 ?read_tsv()
 ```
 
@@ -112,6 +112,18 @@ library(tidyverse)  # use library() to load the tidyverse package
 Arguments without default [need to be supplied.]{.highlight}
 :::
 
+## File paths and operating systems
+
+Use absolute paths:
+
+* Windows (ctrl+c): `C:/Users/leonard/Desktop`
+    * Windows (silly): `C:\Users\leonard\Desktop` — [flip the slashes!]{.highlight}
+* MacOS (cmd+opt+c): `/Users/leonard/Desktop`
+* Linux (ctrl+alt+c): `/home/leonard/Desktop`
+
+<br><br>
+*or* relative paths from the working directory (read up on Rstudio projects, `setwd()` and `getwd()`)
+
 ## The Pipe: Using function output as input
 
 <br><br><br><br>
@@ -119,28 +131,31 @@ Arguments without default [need to be supplied.]{.highlight}
 ::::: columns
 ::: {.column width="50%"}
 ```{r, echo=TRUE}
-library(readr)
+library(tidyverse)
 nrow(read_csv("data/cleaned_example.csv"))
 ```
 :::
 
-::: {.column .fragment width="50%" fragment-index=2}
+::: {.column .fragment width="50%" fragment-index="2"}
 ```{r, echo=TRUE}
-"data/cleaned_example.csv" |> 
-  read_csv() |> 
+"data/cleaned_example.csv" |>
+  read_csv() |>
   nrow()
 ```
-
-The *pipe* is typed as either `%>%` or [`|>`]{.highlight}[^2]
-
-[^2]: [Rstudio: `ctrl+shift+m`]{.fragment fragment-index=2}
 :::
 :::::
 
+:::{.fragment fragment-index="2"}
+<br><br>
+
+The *pipe* is typed as either `%>%` or [`|>`]{.highlight}[^2]
+
+[^2]: [Rstudio: `ctrl+shift+m`]{.fragment fragment-index="2"}
+:::
 
 ## Delimited text files
 
-```{.r}
+``` r
 readr::read_csv()          #Comma delimited, decimal points
 readr::read_csv2()         #Semicolon delimited, decimal comma
 
@@ -151,13 +166,12 @@ readr::read_delim()        #Pick your own delimiter
 readxl::read_xlsx()        #Excel files
 ```
 
-
 ## Folders of files {auto-animate="true"}
 
-```{.r}
+``` r
 data_files <- list.files(
   path = "/path/to/folder",     #Folder containing data files
-  pattern = ".csv",             #Pattern that matches files of interest
+  pattern = ".tsv",             #Pattern that matches files of interest
   recursive = TRUE,             #Look in sub-folders
   full.names = TRUE             #Return full file path
 )
@@ -165,28 +179,24 @@ data_files <- list.files(
 
 ## Folders of files {auto-animate="true"}
 
-```{.r}
+``` r
 data_files <- list.files(
   path = "/path/to/folder",     #Folder containing data files
-  pattern = ".csv",             #Pattern that matches files of interest
+  pattern = ".tsv",             #Pattern that matches files of interest
   recursive = TRUE,             #Look in sub-folders
   full.names = TRUE             #Return full file path
 )
 
-library(purrr)
-data <- map(
-  data_files,
-  \(x) read_tsv(x, id = "path") #Add colum containing the file path
-  ) |> 
-  list_rbind()
-
+data <- read_tsv(data_files, id = "path")
 ```
 
 # Exercise 1
 
-<https://github.com/leonardblaschek/data_wrangling/2024_wrangling_exercises.rmd>
+<https://github.com/leonardblaschek/data_wrangling>
 
 # Data cleaning
+
+## Data cleaning
 
 ```{r, echo = TRUE}
 data <- read_csv("data/cleaned_example.csv")
@@ -194,57 +204,370 @@ data <- read_csv("data/cleaned_example.csv")
 data
 ```
 
+## Systematically missing values: `fill()`
 
-## Systematically missing values
-
-```{r}
-data_filled <- data |> 
+```{r, echo=TRUE}
+data_filled <- data |>
   fill(Sample, .direction = "down")
 
 data_filled
 ```
 
+## Filtering rows: `filter()`
 
-## Long and wide data
+:::: {.columns}
 
-## Separating compound variables
+::: {.column width='70%'}
+```{r, echo=TRUE}
+data_filtered <- data_filled |>
+  filter(Sample != "Blank")
 
-## Correcting data classes
+data_filtered
+```
+:::
 
-## Filtering data
+::: {.column .fragment width='30%'}
+Comparisons
+
+* `A > B`
+* `A == A`
+* `A != B`
+* `A %in% c(B, C)`
+* `!`, `&`, `|`
+* `is.na(A)`
+* ... see `?filter()`
+:::
+
+::::
+
+
+## Selecting columns: `select()`
+
+```{r, echo=TRUE}
+data_selected <- data_filtered |>
+  select(
+    # select columns by name or position; use ["New name" = old name] to rename columns
+    Sample,
+    Replicate,
+    "Proportion" = `Weight%` # wrap non-syntactic names in backticks (``)
+  )
+
+data_selected
+```
+
+## Separating compound variables: `separate_*()`
+
+```{r, echo=TRUE}
+data_sep <- data_selected |>
+  separate_wider_delim(
+    Sample,
+    names = c("Genotype", "Biorep"),
+    delim = " "
+  )
+
+data_sep
+```
+
+## Wide and long data: `pivot_*()`
+
+::::: columns
+::: {.column width="50%"}
+```{r, echo=TRUE}
+data_wide <- data_sep |>
+  pivot_wider(
+    names_from = Genotype,
+    values_from = Proportion
+  )
+
+data_wide
+```
+:::
+
+::: {.column .fragment width="50%"}
+```{r, echo=TRUE}
+data_long <- data_wide |>
+  pivot_longer(
+    c(`Zfp2-1`, `Zfp2-2`),
+    names_to = "Genotype",
+    values_to = "Proportion"
+  )
+
+data_long
+```
+
+:::
+:::::
+
+## Adding rows: `bind_rows()`
+
+:::: {.columns}
+
+::: {.column width='50%'}
+```{r, echo=TRUE}
+wt_data <- read_tsv("data/WT.tsv")
+
+wt_data
+```
+
+:::
+
+::: {.column .fragment width='50%'}
+```{r, echo=TRUE}
+data_sep
+```
+:::
+
+::::
+
+## Adding rows: `bind_rows()`
+
+:::: {.columns}
+
+::: {.column width='50%'}
+```{r, echo=TRUE}
+try(
+  data_bound <- data_sep |>
+    bind_rows(wt_data)
+)
+```
+
+<br><br>
+To bind or join data frames, columns need to have compatible [types]{.highlight}
+
+:::
+
+::: {.column .fragment width='50%'}
+
+```{r, echo=TRUE}
+wt_data <- read_tsv(
+  "data/WT.tsv",
+  col_types = "ccnn"
+)
+
+data_bound <- data_sep |>
+  bind_rows(wt_data)
+
+slice_sample(data_bound, n = 10)
+```
+:::
+
+::::
+
+
+## Adding columns: `*_join()`
+
+:::: {.columns}
+
+::: {.column width='50%'}
+```{r, echo=TRUE}
+genetic_data <- read_tsv("data/genetics.tsv")
+
+genetic_data
+```
+:::
+
+::: {.column .fragment width='50%'}
+```{r, echo=TRUE}
+data_joined <- data_bound |>
+  left_join(genetic_data)
+
+data_joined
+```
+:::
+
+::::
+
+
 
 # Exercise 2
 
-<https://github.com/leonardblaschek/data_wrangling/2024_wrangling_exercises.rmd>
+<https://github.com/leonardblaschek/data_wrangling>
 
 # Data analysis
 
-## Grouping
+```{r, echo=TRUE}
+data_full <- data_filtered |>
+  select(
+    Sample,
+    Replicate,
+    "Amount" = `Amount (based on standard curve)`,
+    "Weight" = Weighed,
+    "Proportion" = `Weight%`
+  ) |>
+  separate_wider_delim(
+    Sample,
+    names = c("Genotype", "Biorep"),
+    delim = " "
+  )
+```
 
-## Mutate
 
-## Summarise
+## One row in, on row out: `mutate()`
+
+```{r, echo=TRUE}
+#| echo: true
+#| output-location: column-fragment
+data_mutated <- data_full |>
+  mutate("Percent" = (Amount / Weight) * 100)
+
+data_mutated
+```
+
+
+## One row in, on row out: `mutate()`
+
+```{r, echo=TRUE}
+#| echo: true
+#| output-location: column
+data_mutated <- data_full |>
+  mutate("Percent" = (Amount / Weight) * 100)
+
+ggplot(
+  data_mutated,
+  aes(x = Proportion, y = Percent)
+) +
+  geom_smooth(
+    method = "lm",
+    formula = "y ~x"
+  ) +
+  geom_point() +
+  theme_classic()
+```
+
+## Conditional assignment: `case_when()`
+
+```{r, echo=TRUE}
+data_mutated <- data_full |>
+  mutate("Transgenic" = case_when(
+    Genotype %in% c("Zfp2-1", "Zfp2-2") ~ "Yes",
+    .default = "No"
+  ))
+
+data_mutated
+```
+
+
+## Calculations within groups: `group_by()`  {auto-animate="true"}
+
+```{r, echo=TRUE}
+#| echo: true
+data_grouped <- data_full |>
+  group_by(Genotype, Biorep)
+
+data_grouped
+```
+
+
+## Many rows in, one row out: `summarise()`  {auto-animate="true"}
+
+```{r, echo=TRUE}
+#| echo: true
+data_summarised <- data_full |>
+  group_by(Genotype, Biorep) |>
+  summarise(
+    Replicate_mean = mean(Proportion)
+  )
+
+data_summarised
+```
+
+## Many rows in, one row out: `summarise()`  {auto-animate="true"}
+
+```{r, echo=TRUE}
+#| echo: true
+data_summarised <- data_full |>
+  group_by(Genotype, Biorep) |>
+  summarise(
+    Replicate_mean = mean(Proportion)
+  ) |>
+  group_by(Genotype) |>
+  summarise(
+    Genotype_mean = mean(Replicate_mean)
+  )
+
+data_summarised
+```
+
 
 ## Like a loop, but better: `map()`
 
+```{r, echo=TRUE}
+lac_data <- list.files(
+  path = "data/lac_data/",
+  pattern = ".csv",
+  full.names = TRUE
+) |>
+  read_csv(id = "file")
+
+lac_data
+```
+
+## Like a loop, but better: `map()`
+
+```{r, echo=TRUE}
+#| output-location: column-fragment
+lac_summarised <- lac_data |>
+  mutate(
+    image = basename(file)
+  ) |>
+  separate_wider_delim(
+    image,
+    delim = "_",
+    names = c("date", "genotype", "replicate"),
+    too_many = "drop"
+  ) |>
+  mutate(intensity = stained_absorbance - unstained_absorbance) |>
+  group_by(genotype, cell_type, replicate) |>
+  summarise("mean_intensity" = mean(intensity)) |>
+  select(genotype, cell_type, mean_intensity)
+
+
+lac_summarised
+```
+
+## Like a loop, but better: `map()`
+
+:::: {.columns}
+
+::: {.column width='40%'}
+```{r, echo=TRUE}
+lac_nested <- lac_summarised |>
+  nest("data" = c(genotype, mean_intensity))
+
+lac_nested
+```
+:::
+
+::: {.column .fragment width='60%'}
+```{r, echo=TRUE}
+library(broom)
+
+lac_p <- lac_nested |>
+  mutate(
+    "t_test" = map(data, \(x) t.test(mean_intensity ~ genotype, data = x)),
+    "t_test_tidy" = map(t_test, tidy),
+    "p_value" = map_dbl(t_test_tidy, \(x) pull(x, "p.value"))
+  )
+
+lac_p
+```
+:::
+
+::::
+
+
 # Exercise 3
 
-<https://github.com/leonardblaschek/data_wrangling/2024_wrangling_exercises.rmd>
+<https://github.com/leonardblaschek/data_wrangling>
 
 # When you're stuck
 
 ::: incremental
 1.  Know which package/function you need? — Help pages and vignettes!
 2.  Know what you want to do but not where to start? — Try an LLM, *e.g.* [perplexity.ai](https://perplexity.ai)
-3.  *I feel like I've done this before ...* — Keep your old scripts [organised]{.highlight} and [annotated]{.highlight}, chances are you'll need that little hack you came up with again in a month or two.
+3.  *I feel like I've done this before ...* — Keep your old scripts [organised]{.highlight} and [annotated]{.highlight}
 :::
-
-# Exercises!
-
-Open up `2023_ggplot2_exercises.rmd` and give it a try
 
 # Resources to go further
 
 -   R for Data Science, Hadley Wickham (2023) -- <https://r4ds.hadley.nz>
--   Fundamentals of Data Visualization, Claus O. Wilke (2019) -- <https://clauswilke.com/dataviz/>
--   *I just need to know how to flip axis labels, quickly!* -- <https://perplexity.ai>

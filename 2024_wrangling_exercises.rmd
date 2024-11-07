@@ -20,11 +20,7 @@ library(tidyverse)
 library(readxl)
 
 # Insert code below
-setwd("/home/leonard/Applications/R/data_wrangling/") # change to path of the folder downloaded from github to use relative paths from here on
 
-tsv_data <- read_tsv("data/cleaned_example.tsv")
-csv_data <- read_csv("data/cleaned_example.csv")
-xlsx_data <- read_xlsx("data/cleaned_example.xlsx", sheet = 2)
 
 ```
 
@@ -46,22 +42,7 @@ Recommended functions:
 library(tidyverse)
 
 # Insert code below
-setwd("/home/leonard/Applications/R/data_wrangling/") # change to path of the folder downloaded from github to use relative paths from here on
 
-lac_files <- list.files(
-  path = "data/lac_data/",
-  pattern = ".csv",
-  full.names = TRUE
-)
-
-lac_data <- read_csv(lac_files, id = "path") |> 
-  mutate("file" = basename(path)) |> 
-  separate_wider_delim(
-    file,
-    delim = "_",
-    names = c("date", "genotype", "replicate"),
-    too_many = "drop"
-  )
 
 ```
 
@@ -88,36 +69,6 @@ Recommended functions:
 library(tidyverse)
 
 # Insert code below
-setwd("/home/leonard/Applications/R/data_wrangling/") # change to path of the folder downloaded from github to use relative paths from here on
 
-zfp_data <- read_tsv("data/cleaned_example.tsv") |> 
-  fill(Sample, .direction = "down") |>
-  filter(Sample != "Blank") |> 
-  select(
-    Sample,
-    Replicate,
-    "Proportion" = `Weight%` # wrap non-syntactic names in backticks (``)
-  ) |> 
-  separate_wider_delim(
-    Sample,
-    names = c("Genotype", "Biorep"),
-    delim = " "
-  )
-  
-wt_data <- read_tsv("data/WT.tsv", col_types = "ccnn")
-
-data <- zfp_data |> 
-  bind_rows(wt_data)
-
-summary_data <- data |> 
-  group_by(Genotype, Biorep) |> 
-  summarise(tech_mean_prop = mean(Proportion)) |> 
-  group_by(Genotype) |> 
-  summarise(
-    mean_prop = mean(tech_mean_prop),
-    median_prop = median(tech_mean_prop),
-    sd_prop = sd(tech_mean_prop),
-    se_prop = sd(tech_mean_prop) / sqrt(n())
-  )
 
 ```
